@@ -50,11 +50,7 @@
       <div style="position:relative">
         <div class="tips">
           <span>Username : admin</span>
-          <span>Password : any</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
+          <span>Password : admin1</span>
         </div>
 
         <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
@@ -76,6 +72,9 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import SocialSign from './components/SocialSignin'
+import {
+  login
+} from "@/api/user.js";
 
 export default {
   name: 'Login',
@@ -98,7 +97,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: 'admin1'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -119,6 +118,8 @@ export default {
         if (query) {
           this.redirect = query.redirect
           this.otherQuery = this.getOtherQuery(query)
+          console.log(this.redirect)
+          console.log(this.otherQuery)
         }
       },
       immediate: true
@@ -156,6 +157,18 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+          // login(this.loginForm)
+          // .then((response) => {
+          //   console.log(this.redirect)
+          //   console.log(this.otherQuery)
+          //   // this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+          //   // this.$router.push("/")
+          //   this.loading = false
+          // })
+          // .catch((e) => {
+          //   this.loading = false
+          // });
+
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
